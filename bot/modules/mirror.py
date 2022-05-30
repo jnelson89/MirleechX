@@ -341,9 +341,9 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
             qbitsel = True
             message_args = mesg[0].split(' ', maxsplit=2)
             link = message_args[2]
-            elif link.isdigit():
-                multi = int(link)
-                raise IndexError
+        elif link.isdigit():
+            multi = int(link)
+            raise IndexError
         if link.startswith("|") or link.startswith("pswd: "):
             link = ''
     except IndexError:
