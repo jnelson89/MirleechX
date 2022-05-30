@@ -432,7 +432,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} or by replying to {file/link}"
         help_msg += "\n\n<b>Multi links only by replying to first link or file:</b>"
         help_msg += "\n<code>/command</code> 10(number of links/files)"
-        return sendMessage(help_msg, bot, message)
+        return sendMessage(help_msg, bot, update)
     elif not os.path.exists(link) and not bot_utils.is_mega_link(link) and not bot_utils.is_gdrive_link(link) and not bot_utils.is_magnet(link):
         try:
             link = direct_link_generator(link)
