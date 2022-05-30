@@ -36,7 +36,17 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 LOGGER = logging.getLogger(__name__)
 
 
-load_dotenv('config.env')
+load_dotenv('config.env', override=True)
+
+def getConfig(name: str):
+    return os.environ[name]
+
+try:
+    SERVER_PORT = getConfig('SERVER_PORT')
+    if len(SERVER_PORT) == 0:
+        raise KeyError
+except:
+    SERVER_PORT = 80
 
 SERVER_PORT = os.environ.get('SERVER_PORT', None)
 PORT = os.environ.get('PORT', SERVER_PORT)
@@ -51,8 +61,6 @@ DRIVES_NAMES = []
 DRIVES_IDS = []
 INDEX_URLS = []
 
-def getConfig(name: str):
-    return os.environ[name]
 
 def mktable():
     try:
