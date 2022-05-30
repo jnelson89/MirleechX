@@ -399,12 +399,12 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
                 ms = update.message
                 tg_downloader.add_download(ms, f'{DOWNLOAD_DIR}{listener.uid}/', name)
                 if multi > 1:
-                    sleep(3)
+                    time.sleep(3)
                     nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
                     nextmsg = sendMessage(message_args[0], bot, nextmsg)
                     nextmsg.from_user.id = message.from_user.id
                     multi -= 1
-                    sleep(3)
+                    time.sleep(3)
                     _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, pswd, multi)
                 return
             else:
@@ -490,7 +490,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         sendStatusMessage(update, bot)
     
     if multi > 1:
-        sleep(3)
+        time.sleep(3)
         nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
         msg = message_args[0]
         if len(mesg) > 2:
@@ -498,7 +498,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         nextmsg = sendMessage(msg, bot, nextmsg)
         nextmsg.from_user.id = message.from_user.id
         multi -= 1
-        sleep(3)
+        time.sleep(3)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, pswd, multi)
         
 
