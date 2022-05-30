@@ -48,7 +48,6 @@ try:
 except:
     SERVER_PORT = 80
 
-SERVER_PORT = os.environ.get('SERVER_PORT', None)
 PORT = os.environ.get('PORT', SERVER_PORT)
 web = subprocess.Popen([f"gunicorn wserver:start_server --bind 0.0.0.0:{PORT} --worker-class aiohttp.GunicornWebWorker"], shell=True)
 alive = subprocess.Popen(["python3", "alive.py"])
@@ -56,6 +55,8 @@ subprocess.run(["mkdir", "-p", "qBittorrent/config"])
 subprocess.run(["cp", "qBittorrent.conf", "qBittorrent/config/qBittorrent.conf"])
 nox = subprocess.Popen(["qbittorrent-nox", "--profile=."])
 time.sleep(1)
+
+
 Interval = []
 DRIVES_NAMES = []
 DRIVES_IDS = []
