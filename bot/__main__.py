@@ -5,6 +5,7 @@ import asyncio
 
 from pyrogram import idle
 from sys import executable
+from subprocess import run as srun, check_output
 
 from telegram import ParseMode
 from telegram.ext import CommandHandler
@@ -60,9 +61,6 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
 def restart(update, context):
     restart_message = sendMessage("Restarting...", context.bot, update)
     # Save restart message object in order to reply to it after restarting
-    with open(".restartmsg", "w") as f:
-        f.truncate(0)
-        f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
     fs_utils.clean_all()
     alive.kill()
     process = psutil.Process(web.pid)
@@ -70,6 +68,10 @@ def restart(update, context):
         proc.kill()
     process.kill()
     nox.kill()
+    srun(["python3", "update.py"])
+    with open(".restartmsg", "w") as f:
+        f.truncate(0)
+        f.write(f"{restart_message.chat.id}\n{restart_message.message_id}\n")
     os.execl(executable, executable, "-m", "bot")
 
 
