@@ -491,8 +491,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     
     if multi > 1:
         time.sleep(3)
-        update.message.from_user.id
-        nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
+        nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'from_user': update.message.from_user})
         nextmsg = sendMessage(message_args[0], bot, nextmsg)
         nextmsg.from_user.id = update.message.from_user.id
         multi -= 1
