@@ -331,7 +331,7 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    mesg = update.message.text.split(' ')
+    mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -494,7 +494,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'message': update.message})
         msg = message_args[0]
         if len(mesg) > 2:
-            msg += '\n' + mesg[1] + '\n' + mesg[2]
+            msg += mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
         multi -= 1
         time.sleep(3)
