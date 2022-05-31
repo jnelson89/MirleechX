@@ -331,7 +331,7 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    mesg = update.message.text.split('\n')
+    mesg = message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -371,7 +371,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         pswd = None
     link = re.split(r"pswd:|\|", link)[0]
     link = link.strip()
-    reply_to = update.message.reply_to_message
+    reply_to = message.reply_to_message
     if reply_to is not None:
         file = None
         media_array = [reply_to.document, reply_to.video, reply_to.audio]
@@ -394,7 +394,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 file_name = str(time.time()).replace(".", "") + ".torrent"
                 link = file.get_file().download(custom_path=file_name)
             elif file.mime_type != "application/x-bittorrent":
-                listener = MirrorListener(bot, update, pswd, isZip, extract, isLeech=isLeech)
+                listener = MirrorListener(bot, message, pswd, isZip, extract, isLeech=isLeech)
                 tg_downloader = TelegramDownloadHelper(listener)
                 ms = update.message
                 tg_downloader.add_download(ms, f'{DOWNLOAD_DIR}{listener.uid}/', name)
@@ -418,7 +418,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             open(file_name, "wb").write(resp.content)
             link = f"{file_name}"
         else:
-            sendMessage(f"ERROR: link got HTTP response: {resp.status_code}", bot, update)
+            sendMessage(f"ERROR: link got HTTP response: {resp.status_code}", bot, message)
             return
 
     elif not bot_utils.is_url(link) and not bot_utils.is_magnet(link):
@@ -432,34 +432,34 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} or by replying to {file/link}"
         help_msg += "\n\n<b>Multi links only by replying to first link or file:</b>"
         help_msg += "\n<code>/command</code> 10(number of links/files)"
-        return sendMessage(help_msg, bot, update)
+        return sendMessage(help_msg, bot, message)
     elif not os.path.exists(link) and not bot_utils.is_mega_link(link) and not bot_utils.is_gdrive_link(link) and not bot_utils.is_magnet(link):
         try:
             link = direct_link_generator(link)
         except DirectDownloadLinkException as e:
             LOGGER.info(e)
             if "ERROR:" in str(e):
-                sendMessage(f"{e}", bot, update)
+                sendMessage(f"{e}", bot, message)
                 return
             if "Youtube" in str(e):
-                sendMessage(f"{e}", bot, update)
+                sendMessage(f"{e}", bot, message)
                 return
 
-    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech)
+    listener = MirrorListener(bot, message, pswd, isZip, extract, isQbit, isLeech)
 
     if bot_utils.is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
-            sendMessage(f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\nUse /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\nUse /{BotCommands.UnzipMirrorCommand} to extracts archive Google Drive file", bot, update)
+            sendMessage(f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\nUse /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\nUse /{BotCommands.UnzipMirrorCommand} to extracts archive Google Drive file", bot, message)
             return
         res, size, name, files = gdriveTools.GoogleDriveHelper().helper(link)
         if res != "":
-            sendMessage(res, bot, update)
+            sendMessage(res, bot, message)
             return
         if ZIP_UNZIP_LIMIT is not None:
             LOGGER.info('Checking File/Folder Size...')
             if size > ZIP_UNZIP_LIMIT * 1024**3:
                 msg = f'Failed, Zip/Unzip limit is {ZIP_UNZIP_LIMIT}GB.\nYour File/Folder size is {get_readable_file_size(size)}.'
-                sendMessage(msg, bot, update)
+                sendMessage(msg, bot, message)
                 return
         LOGGER.info(f"Download Name: {name}")
         drive = gdriveTools.GoogleDriveHelper(name, listener)
@@ -467,16 +467,16 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         download_status = DownloadStatus(drive, size, listener, gid)
         with download_dict_lock:
             download_dict[listener.uid] = download_status
-        sendStatusMessage(update, bot)
+        sendStatusMessage(message, bot)
         drive.download(link)
 
     elif bot_utils.is_mega_link(link):
         if BLOCK_MEGA_LINKS:
-            sendMessage("Mega links are blocked!", bot, update)
+            sendMessage("Mega links are blocked!", bot, message)
             return
         link_type = bot_utils.get_mega_link_type(link)
         if link_type == "folder" and BLOCK_MEGA_FOLDER:
-            sendMessage("Mega folder are blocked!", bot, update)
+            sendMessage("Mega folder are blocked!", bot, message)
         else:
             mega_dl = MegaDownloadHelper()
             mega_dl.add_download(link, f'{DOWNLOAD_DIR}{listener.uid}/', listener)
@@ -487,7 +487,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
     else:
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}{listener.uid}/', listener, name)
-        sendStatusMessage(update, bot)
+        sendStatusMessage(message, bot)
     
     if multi > 1:
         time.sleep(3)
