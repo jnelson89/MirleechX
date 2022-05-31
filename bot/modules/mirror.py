@@ -500,7 +500,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
-        nextmsg = sendMessage(msg, bot, update(nextmsg))
+        nextmsg = sendMessage(msg, bot, update=nextmsg)
         nextmsg.from_user.id = message.from_user.id
         multi -= 1
         time.sleep(4)
