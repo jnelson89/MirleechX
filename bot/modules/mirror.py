@@ -458,7 +458,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
                 sendMessage(f"{e}", bot, update)
                 return
 
-    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech, tag)
+    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech)
 
     if bot_utils.is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
