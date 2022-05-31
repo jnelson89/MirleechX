@@ -495,7 +495,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
-        nextmsg = sendMessage(msg, bot, nextmsg)
+        nextmsg = sendMessage(msg, bot, update.nextmsg)
         nextmsg.from_user.id = message.from_user.id
         multi -= 1
         time.sleep(4)
@@ -512,7 +512,7 @@ def unzip_mirror(update, context):
 def zip_mirror(update, context):
     _mirror(context.bot, update, True)
 
-def qb_mirror(update.message, context):
+def qb_mirror(update, context):
     _mirror(context.bot, update, isQbit=True)
 
 def qb_unzip_mirror(update, context):
