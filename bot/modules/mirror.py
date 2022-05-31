@@ -331,7 +331,7 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    mesg = message.text.split('\n')
+    mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -371,7 +371,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         pswd = None
     link = re.split(r"pswd:|\|", link)[0]
     link = link.strip()
-    reply_to = message.reply_to_message
+    reply_to = update.message.reply_to_message
     if reply_to is not None:
         file = None
         media_array = [reply_to.document, reply_to.video, reply_to.audio]
