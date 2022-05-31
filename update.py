@@ -15,7 +15,7 @@ basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
 CONFIG_FILE_URL = environ.get('CONFIG_FILE_URL')
 
 if CONFIG_FILE_URL is not None:
-    res = requests.get(CONFIG_FILE_URL)
+    res = rget(CONFIG_FILE_URL)
     if res.status_code == 200:
         with open('config.env', 'wb+') as f:
             f.write(res.content)
