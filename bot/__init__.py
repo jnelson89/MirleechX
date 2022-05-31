@@ -55,8 +55,6 @@ subprocess.run(["mkdir", "-p", "qBittorrent/config"])
 subprocess.run(["cp", "qBittorrent.conf", "qBittorrent/config/qBittorrent.conf"])
 nox = subprocess.Popen(["qbittorrent-nox", "--profile=."])
 time.sleep(1)
-
-
 Interval = []
 DRIVES_NAMES = []
 DRIVES_IDS = []
