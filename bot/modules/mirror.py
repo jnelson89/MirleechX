@@ -491,7 +491,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     
     if multi > 1:
         time.sleep(3)
-        nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
+        nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'message': update.message})
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
