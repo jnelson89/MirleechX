@@ -499,7 +499,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         nextmsg.from_user.id = message.from_user.id
         multi -= 1
         time.sleep(4)
-        _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
+        _mirror(bot, nextmsg.message, isZip, extract, isQbit, isLeech, multi)
         
 
 
