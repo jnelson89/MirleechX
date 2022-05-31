@@ -331,7 +331,7 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    mesg = update.text.split('\n')
+    mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -493,6 +493,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         time.sleep(4)
         nextmsg = type('nextmsg', (object, ), 
         {
+        'update': telegram.Update,
         'chat_id': update.message.chat_id, 
         'message_id': update.message.reply_to_message.message_id + 1
         }
@@ -509,7 +510,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
 
 
 def mirror(update, context):
-    _mirror(context.bot, update.message)
+    _mirror(context.bot, update)
 
 def unzip_mirror(update, context):
     _mirror(context.bot, update, extract=True)
@@ -518,7 +519,7 @@ def zip_mirror(update, context):
     _mirror(context.bot, update, True)
 
 def qb_mirror(update, context):
-    _mirror(context.bot, update.message, isQbit=True)
+    _mirror(context.bot, update, isQbit=True)
 
 def qb_unzip_mirror(update, context):
     _mirror(context.bot, update, extract=True, isQbit=True)
