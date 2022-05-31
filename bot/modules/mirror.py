@@ -494,7 +494,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         nextmsg = type('nextmsg', (object, ), 
         {
         'chat_id': update.message.chat_id, 
-        'message_id': update.message.reply_to_message.message_id + 1
+        'message_id': update.message.reply_to_message.message_id + 1,
         'from_user': update.message.from_user
         }
         )
