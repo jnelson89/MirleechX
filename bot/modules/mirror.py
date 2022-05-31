@@ -407,7 +407,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
                 file_name = str(time.time()).replace(".", "") + ".torrent"
                 link = file.get_file().download(custom_path=file_name)
             elif file.mime_type != "application/x-bittorrent":
-                listener = MirrorListener(bot, update, pswd, isZip, extract, isLeech=isLeech)
+                listener = MirrorListener(bot, update, pswd, isZip, extract, isLeech=isLeech, tag)
                 tg_downloader = TelegramDownloadHelper(listener)
                 ms = update.message
                 tg_downloader.add_download(ms, f'{DOWNLOAD_DIR}{listener.uid}/', name)
@@ -458,7 +458,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
                 sendMessage(f"{e}", bot, update)
                 return
 
-    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech)
+    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech, tag)
 
     if bot_utils.is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
@@ -504,7 +504,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     
     if multi > 1:
         time.sleep(3)
-        nextmsg = type('nextmsg', (object, ), {'message': update.message, 'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'from_user': update.message.from_user})
+        nextmsg = type('nextmsg', (object, ), {'message': message, 'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'from_user': update.message.from_user})
         nextmsg = sendMessage(message_args[0], bot, nextmsg)
         nextmsg.from_user.id = update.message.from_user.id
         multi -= 1
