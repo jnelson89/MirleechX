@@ -513,7 +513,7 @@ def zip_mirror(update, context):
     _mirror(context.bot, update, True)
 
 def qb_mirror(update, context):
-    _mirror(context.bot, update, isQbit=True)
+    _mirror(context.bot, update.message, isQbit=True)
 
 def qb_unzip_mirror(update, context):
     _mirror(context.bot, update, extract=True, isQbit=True)
