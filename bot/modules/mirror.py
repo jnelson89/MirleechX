@@ -371,6 +371,11 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         pswd = None
     link = re.split(r"pswd:|\|", link)[0]
     link = link.strip()
+    if update.message.from_user.username:
+        tag = f"@{update.message.from_user.username}"
+    else:
+        tag = update.message.from_user.mention_html(update.message.from_user.first_name)
+
     reply_to = update.message.reply_to_message
     if reply_to is not None:
         file = None
@@ -379,6 +384,14 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
             if i is not None:
                 file = i
                 break
+        
+        
+        if not reply_to.from_user.is_bot:
+            if reply_to.from_user.username:
+                tag = f"@{reply_to.from_user.username}"
+            else:
+                tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
+                
         if (
             not bot_utils.is_url(link)
             and not bot_utils.is_magnet(link)
