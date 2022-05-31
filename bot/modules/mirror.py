@@ -503,14 +503,14 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         sendStatusMessage(update, bot)
     
     if multi > 1:
-        time.sleep(3)
+        time.sleep(4)
         nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
         nextmsg.from_user.id = update.effective_message.from_user.id
         multi -= 1
-        time.sleep(3)
+        time.sleep(4)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
         
 
