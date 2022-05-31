@@ -38,15 +38,6 @@ LOGGER = logging.getLogger(__name__)
 
 load_dotenv('config.env', override=True)
 
-def getConfig(name: str):
-    return os.environ[name]
-
-try:
-    SERVER_PORT = getConfig('SERVER_PORT')
-    if len(SERVER_PORT) == 0:
-        raise KeyError
-except:
-    SERVER_PORT = 80
 
 PORT = os.environ.get('PORT', SERVER_PORT)
 web = subprocess.Popen([f"gunicorn wserver:start_server --bind 0.0.0.0:{PORT} --worker-class aiohttp.GunicornWebWorker"], shell=True)
@@ -60,6 +51,8 @@ DRIVES_NAMES = []
 DRIVES_IDS = []
 INDEX_URLS = []
 
+def getConfig(name: str):
+    return os.environ[name]
 
 def mktable():
     try:
