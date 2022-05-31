@@ -58,8 +58,8 @@ Type /{BotCommands.HelpCommand} to get a list of available commands
     else:
         sendMarkup('Not Authorized user', context.bot, update, reply_markup)
 
-def restart(message, context):
-    restart_message = sendMessage("Restarting...", context.bot, message)
+def restart(update, context):
+    restart_message = sendMessage("Restarting...", context.bot, update)
     # Save restart message object in order to reply to it after restarting
     fs_utils.clean_all()
     alive.kill()

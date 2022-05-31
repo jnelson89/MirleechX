@@ -9,7 +9,7 @@ from bot.helper.ext_utils.bot_utils import get_readable_message, get_readable_fi
 from telegram.error import TimedOut, BadRequest, RetryAfter
 
 
-def sendMessage(text: str, bot, message: Message):
+def sendMessage(text: str, bot, update: Update):
     try:
         return bot.send_message(update.message.chat_id,
                             reply_to_message_id=update.message.message_id,
