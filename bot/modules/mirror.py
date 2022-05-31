@@ -493,8 +493,8 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         time.sleep(4)
         nextmsg = type('nextmsg', (object, ), 
         {
-        'chat_id': update.message.chat_id, 
-        'message_id': update.message.reply_to_message.message_id + 1
+        'chat_id': message.chat_id, 
+        'message_id': message.reply_to_message.message_id + 1
         }
         )
         msg = message_args[0]
