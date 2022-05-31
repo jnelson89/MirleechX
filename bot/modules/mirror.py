@@ -496,7 +496,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
-        nextmsg.from_user.id = message.from_user.id
+        nextmsg.from_user.id = effective_message.from_user.id
         multi -= 1
         time.sleep(3)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
