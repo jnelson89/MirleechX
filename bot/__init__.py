@@ -389,6 +389,23 @@ try:
             raise KeyError
 except KeyError:
     pass
+
+try:
+    CREDS_URL = getConfig('CREDS_URL')
+    if len(CREDS_URL) == 0:
+        CREDS_URL = None
+    else:
+        res = requests.get(CREDS_URL)
+        if res.status_code == 200:
+            with open('credentials.json', 'wb+') as f:
+                f.write(res.content)
+                f.close()
+        else:
+            logging.error(f"Failed to download credentials.json {res.status_code}")
+            raise KeyError
+except KeyError:
+    pass
+
 try:
     ACCOUNTS_ZIP_URL = getConfig('ACCOUNTS_ZIP_URL')
     if len(ACCOUNTS_ZIP_URL) == 0:
