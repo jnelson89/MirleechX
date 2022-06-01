@@ -411,6 +411,7 @@ try:
         cmd_acc = f"curl -H \"Authorization: token {GH_TOKEN}\" {ACCOUNTS_ZIP_URL} -o accounts.zip"
         subprocess.run(cmd_acc, shell=True)
         subprocess.run(["unzip", "-o", "accounts.zip", "-d", "/usr/src/app"])
+        subprocess.run(["rm", "-rf", "accounts.zip"])
     else:
         logging.error(f"Failed to download accounts.zip")
         raise KeyError
