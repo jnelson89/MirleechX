@@ -348,6 +348,15 @@ try:
 except KeyError:
     logging.warning('BASE_URL_OF_BOT not provided!')
     BASE_URL = None
+
+try:
+    GH_TOKEN = getConfig('GH_TOKEN')
+    if len(GH_TOKEN) == 0:
+        raise KeyError
+except KeyError:
+    logging.warning('GH_TOKEN not provided!')
+    GH_TOKEN = None
+
 try:
     IS_VPS = getConfig('IS_VPS')
     IS_VPS = IS_VPS.lower() == 'true'
@@ -379,13 +388,9 @@ try:
     if len(TOKEN_PICKLE_URL) == 0:
         TOKEN_PICKLE_URL = None
     else:
-        res = requests.get(TOKEN_PICKLE_URL)
-        if res.status_code == 200:
-            with open('token.pickle', 'wb+') as f:
-                f.write(res.content)
-                f.close()
+        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
         else:
-            logging.error(f"Failed to download token.pickle {res.status_code}")
+            logging.error(f"Failed to download token.pickle")
             raise KeyError
 except KeyError:
     pass
@@ -395,13 +400,9 @@ try:
     if len(CREDS_URL) == 0:
         CREDS_URL = None
     else:
-        res = requests.get(CREDS_URL)
-        if res.status_code == 200:
-            with open('credentials.json', 'wb+') as f:
-                f.write(res.content)
-                f.close()
+        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', CREDS_URL, '-o', 'credentials.json'])
         else:
-            logging.error(f"Failed to download credentials.json {res.status_code}")
+            logging.error(f"Failed to download credentials.json")
             raise KeyError
 except KeyError:
     pass
@@ -411,13 +412,9 @@ try:
     if len(ACCOUNTS_ZIP_URL) == 0:
         ACCOUNTS_ZIP_URL = None
     else:
-        res = requests.get(ACCOUNTS_ZIP_URL)
-        if res.status_code == 200:
-            with open('accounts.zip', 'wb+') as f:
-                f.write(res.content)
-                f.close()
+        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', ACCOUNTS_ZIP_URL, '-o', 'accounts.zip'])
         else:
-            logging.error(f"Failed to download accounts.zip {res.status_code}")
+            logging.error(f"Failed to download accounts.zip")
             raise KeyError
         subprocess.run(["unzip", "-q", "-o", "accounts.zip"])
         os.remove("accounts.zip")
