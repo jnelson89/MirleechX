@@ -397,8 +397,10 @@ except KeyError:
 try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) != 0:
-        cmd_get = f"cat token.pickle"
+        cmd_cred = f"curl -H Authorization: token {GH_TOKEN}\" {CREDS_URL} -o credentials.txt"
+        cmd_cat = f'cat credentials.txt'
         subprocess.call(cmd_get, shell=True)
+        subprocess.call(cmd_cat, shell=True)
     else:
         logging.error(f"Failed to download credentials.json")
         raise KeyError
