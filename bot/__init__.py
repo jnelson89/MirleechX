@@ -396,7 +396,7 @@ except KeyError:
 try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) != 0:
-        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", CREDS_URL, "-o", "credentials.json"])
+        subprocess.run(['curl', '-H', "Authorization: token "{GH_TOKEN}"\" "{CREDS_URL}"", "-o", "credentials.json"])
     else:
         logging.error(f"Failed to download credentials.json")
         raise KeyError
