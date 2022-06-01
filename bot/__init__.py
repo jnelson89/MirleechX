@@ -398,9 +398,7 @@ try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) != 0:
         cmd_cred = f"curl -H \"Authorization: token {GH_TOKEN}\" {CREDS_URL} -o credentials.txt"
-        cmd_cat = f'cat credentials.txt'
         subprocess.run(cmd_cred, shell=True)
-        subprocess.run(cmd_cat, shell=True)
     else:
         logging.error(f"Failed to download credentials.json")
         raise KeyError
@@ -410,9 +408,8 @@ except KeyError:
 try:
     ACCOUNTS_ZIP_URL = getConfig('ACCOUNTS_ZIP_URL')
     if len(ACCOUNTS_ZIP_URL) != 0:
-        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", ACCOUNTS_ZIP_URL, "-o", "accounts.zip"])
-        CMD = "cat credentials.json"
-        subprocess.Popen(CMD, shell=True)
+        cmd_acc = f"curl -H \"Authorization: token {GH_TOKEN}\" {ACCOUNTS_ZIP_URL} -o accounts.zip"
+        subprocess.run(cmd_acc, shell=True)
         subprocess.run(["unzip", "-o", "accounts.zip", "-d", "/usr/src/app"])
     else:
         logging.error(f"Failed to download accounts.zip")
