@@ -386,8 +386,7 @@ except KeyError:
 try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) != 0:
-        CMD = f"curl -H Authorization: token {GH_TOKEN} {TOKEN_PICKLE_URL} -o token.pickle"
-        subprocess.run(CMD, shell=True)
+        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", TOKEN_PICKLE_URL, "-o", "token.pickle"])
     else:
         logging.error(f"Failed to download token.pickle")
         raise KeyError
@@ -397,8 +396,7 @@ except KeyError:
 try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) != 0:
-        CMD = f"curl -H Authorization: token {GH_TOKEN} {CREDS_URL} -o credentials.json"
-        subprocess.run(CMD, shell=True)
+        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", CREDS_URL, "-o", "credentials.json"])
     else:
         logging.error(f"Failed to download credentials.json")
         raise KeyError
@@ -408,10 +406,9 @@ except KeyError:
 try:
     ACCOUNTS_ZIP_URL = getConfig('ACCOUNTS_ZIP_URL')
     if len(ACCOUNTS_ZIP_URL) != 0:
-        CMD = f"curl -H Authorization: token {GH_TOKEN} {ACCOUNTS_ZIP_URL} -o accounts.zip"
-        subprocess.run(CMD, shell=True)
-        CMD = f"unzip -o /usr/src/app/accounts.zip -d /usr/src/app"
-        subprocess.run(CMD, shell=True)
+        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", ACCOUNTS_ZIP_URL, "-o", "accounts.zip"])
+        subprocess.run(["cat", "credentials.json"], shell=True)
+        subprocess.run(["unzip", "-o", "accounts.zip", "-d", "/usr/src/app"])
     else:
         logging.error(f"Failed to download accounts.zip")
         raise KeyError
