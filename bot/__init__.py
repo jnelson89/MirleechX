@@ -387,7 +387,7 @@ try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) != 0:
         cmd_tok = f"curl -H Authorization: token {GH_TOKEN}\" {TOKEN_PICKLE_URL} -o token.pickle"
-        subprocess.run(cmd_tok)
+        subprocess.run(cmd_tok, shell=True)
     else:
         logging.error(f"Failed to download token.pickle")
         raise KeyError
