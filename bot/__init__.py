@@ -387,11 +387,11 @@ try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) == 0:
         TOKEN_PICKLE_URL = None
-    else:
+    elif:
         subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
-    else:
-        logging.error(f"Failed to download token.pickle")
-        raise KeyError
+        else:
+            logging.error(f"Failed to download token.pickle")
+            raise KeyError
 except KeyError:
     pass
 
@@ -399,11 +399,11 @@ try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) == 0:
         CREDS_URL = None
-    else:
+    elif:
         subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', CREDS_URL, '-o', 'credentials.json'])
-    else:
-        logging.error(f"Failed to download credentials.json")
-        raise KeyError
+        else:
+            logging.error(f"Failed to download credentials.json")
+            raise KeyError
 except KeyError:
     pass
 
@@ -411,13 +411,13 @@ try:
     ACCOUNTS_ZIP_URL = getConfig('ACCOUNTS_ZIP_URL')
     if len(ACCOUNTS_ZIP_URL) == 0:
         ACCOUNTS_ZIP_URL = None
-    else:
+    elif:
         subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', ACCOUNTS_ZIP_URL, '-o', 'accounts.zip'])
-    else:
-        logging.error(f"Failed to download accounts.zip")
-        raise KeyError
         subprocess.run(["unzip", "-q", "-o", "accounts.zip"])
         os.remove("accounts.zip")
+        else:
+            logging.error(f"Failed to download accounts.zip")
+            raise KeyError
 except KeyError:
     pass
 try:
