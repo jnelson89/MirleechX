@@ -388,7 +388,7 @@ try:
     if len(TOKEN_PICKLE_URL) == 0:
         TOKEN_PICKLE_URL = None
     else:
-        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
+        subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
         else:
             logging.error(f"Failed to download token.pickle")
             raise KeyError
@@ -400,7 +400,7 @@ try:
     if len(CREDS_URL) == 0:
         CREDS_URL = None
     else:
-        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', CREDS_URL, '-o', 'credentials.json'])
+        subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', CREDS_URL, '-o', 'credentials.json'])
         else:
             logging.error(f"Failed to download credentials.json")
             raise KeyError
@@ -412,7 +412,7 @@ try:
     if len(ACCOUNTS_ZIP_URL) == 0:
         ACCOUNTS_ZIP_URL = None
     else:
-        subprocess.run(["curl", "-H", 'Authorization: token'' 'GH_TOKEN'"', ACCOUNTS_ZIP_URL, '-o', 'accounts.zip'])
+        subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', ACCOUNTS_ZIP_URL, '-o', 'accounts.zip'])
         else:
             logging.error(f"Failed to download accounts.zip")
             raise KeyError
