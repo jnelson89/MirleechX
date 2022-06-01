@@ -387,11 +387,11 @@ try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) == 0:
         TOKEN_PICKLE_URL = None
-        elif:
-            subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
-        else:
-            logging.error(f"Failed to download token.pickle")
-            raise KeyError
+    elif:
+        subprocess.run(["curl", "-H", 'Authorization: token'' ',GH_TOKEN,'"', TOKEN_PICKLE_URL, '-o', 'token.pickle'])
+    else:
+        logging.error(f"Failed to download token.pickle")
+        raise KeyError
 except KeyError:
     pass
 
