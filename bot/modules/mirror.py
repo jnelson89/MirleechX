@@ -12,8 +12,6 @@ import shutil
 
 from telegram.ext import CommandHandler
 from telegram import InlineKeyboardMarkup
-from telegram.message import Message
-from telegram.update import Update
 
 from bot import Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, BLOCK_MEGA_FOLDER, BLOCK_MEGA_LINKS, VIEW_LINK, aria2, \
@@ -511,7 +509,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
-        nextmsg.from_user.id = Update.Message.from_user.id
+        nextmsg.from_user.id = update.message
         multi -= 1
         time.sleep(4)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
