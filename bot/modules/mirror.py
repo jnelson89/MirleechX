@@ -11,7 +11,7 @@ import time
 import shutil
 
 from telegram.ext import CommandHandler
-from telegram import InlineKeyboardMarkup
+from telegram import InlineKeyboardMarkup Message
 
 from bot import Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, BLOCK_MEGA_FOLDER, BLOCK_MEGA_LINKS, VIEW_LINK, aria2, \
@@ -504,13 +504,13 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     
     if multi > 1:
         time.sleep(4)
-        msf = update.message
+        msf = update.Message
         nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
-        nextmsg.from_user.id = update.from_user.id
+        nextmsg.from_user.id = Message.from_user.id
         multi -= 1
         time.sleep(4)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
