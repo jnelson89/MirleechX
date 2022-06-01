@@ -386,7 +386,7 @@ except KeyError:
 try:
     TOKEN_PICKLE_URL = getConfig('TOKEN_PICKLE_URL')
     if len(TOKEN_PICKLE_URL) != 0:
-        subprocess.run(["curl", "-H", "Authorization: token "GH_TOKEN"", TOKEN_PICKLE_URL, "-o", "token.pickle"])
+        subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", TOKEN_PICKLE_URL, "-o", "token.pickle"])
     else:
         logging.error(f"Failed to download token.pickle")
         raise KeyError
