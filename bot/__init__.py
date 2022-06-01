@@ -397,7 +397,8 @@ except KeyError:
 try:
     CREDS_URL = getConfig('CREDS_URL')
     if len(CREDS_URL) != 0:
-        
+        cmd_get = f"cat token.pickle"
+        subprocess.call(cmd_get, shell=True)
     else:
         logging.error(f"Failed to download credentials.json")
         raise KeyError
