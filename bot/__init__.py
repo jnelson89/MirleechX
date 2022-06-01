@@ -407,7 +407,8 @@ try:
     ACCOUNTS_ZIP_URL = getConfig('ACCOUNTS_ZIP_URL')
     if len(ACCOUNTS_ZIP_URL) != 0:
         subprocess.run(["curl", "-H", "Authorization: token GH_TOKEN", ACCOUNTS_ZIP_URL, "-o", "accounts.zip"])
-        subprocess.run(["cat", "/usr/src/app/credentials.json"])
+        CMD = "cat credentials.json"
+        subprocess.Popen(CMD, shell=True)
         subprocess.run(["unzip", "-o", "accounts.zip", "-d", "/usr/src/app"])
     else:
         logging.error(f"Failed to download accounts.zip")
