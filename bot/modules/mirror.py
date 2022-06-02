@@ -10,6 +10,8 @@ import string
 import time
 import shutil
 
+from telegram.message import Message
+
 from telegram.ext import CommandHandler
 from telegram import InlineKeyboardMarkup
 
