@@ -20,6 +20,19 @@ def sendMessage(text: str, bot, update: Update):
         return sendMessage(text, bot, update)
     except Exception as e:
         LOGGER.error(str(e))
+        
+def sendMessage2(text: str, bot, message: Message):
+    try:
+        return bot.sendMessage(message.chat_id,
+                            reply_to_message_id=message.message_id,
+                            text=text, allow_sending_without_reply=True, parse_mode='HTMl', disable_web_page_preview=True)
+    except RetryAfter as r:
+        LOGGER.warning(str(r))
+        sleep(r.retry_after * 1.5)
+        return sendMessage(text, bot, message)
+    except Exception as e:
+        LOGGER.error(str(e))
+        return
 
 def sendMarkup(text: str, bot, update: Update, reply_markup: InlineKeyboardMarkup):
     try:
