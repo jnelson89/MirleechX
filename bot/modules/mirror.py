@@ -334,7 +334,7 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     try:
         mesg = update.message.text.split('\n')
     except AttributeError:
-        mesg = message.text.split('\n')
+        mesg = update.message.text.split('\n')
     # mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
