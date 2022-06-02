@@ -1,7 +1,7 @@
 class MirrorListeners:
-    def __init__(self, context, update):
+    def __init__(self, context, message):
         self.bot = context
-        self.update = update
+        # self.update = update
         self.message = message
         self.uid = self.message.message_id
 
