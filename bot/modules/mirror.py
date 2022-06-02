@@ -330,8 +330,8 @@ class MirrorListener(listeners.MirrorListeners):
         else:
             update_all_messages()
 
-def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    mesg = message.text.split('\n')
+def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False):
+    mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -371,12 +371,12 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         pswd = None
     link = re.split(r"pswd:|\|", link)[0]
     link = link.strip()
-    if message.from_user.username:
-        tag = f"@{message.from_user.username}"
+    if update.message.from_user.username:
+        tag = f"@{update.message.from_user.username}"
     else:
-        tag = message.from_user.mention_html(message.from_user.first_name)
+        tag = update.message.from_user.mention_html(update.message.from_user.first_name)
 
-    reply_to = message.reply_to_message
+    reply_to = update.message.reply_to_message
     if reply_to is not None:
         file = None
         media_array = [reply_to.document, reply_to.video, reply_to.audio]
@@ -409,13 +409,13 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             elif file.mime_type != "application/x-bittorrent":
                 listener = MirrorListener(bot, update, pswd, isZip, extract, isLeech=isLeech)
                 tg_downloader = TelegramDownloadHelper(listener)
-                ms = message
+                ms = update.message
                 tg_downloader.add_download(ms, f'{DOWNLOAD_DIR}{listener.uid}/', name)
                 if multi > 1:
                     time.sleep(4)
-                    nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
-                    nextmsg = sendMessage2(message_args[0], bot, nextmsg)
-                    nextmsg.from_user.id = message.from_user.id
+                    nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
+                    nextmsg = sendMessage(message_args[0], bot, nextmsg)
+                    nextmsg.from_user.id = update.message.from_user.id
                     multi -= 1
                     time.sleep(4)
                     _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
@@ -431,7 +431,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             open(file_name, "wb").write(resp.content)
             link = f"{file_name}"
         else:
-            sendMessage2(f"ERROR: link got HTTP response: {resp.status_code}", bot, message)
+            sendMessage(f"ERROR: link got HTTP response: {resp.status_code}", bot, update)
             return
 
     elif not bot_utils.is_url(link) and not bot_utils.is_magnet(link):
@@ -445,34 +445,34 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         help_msg += "\n<code>/qbcommand</code> <b>s</b> {link} or by replying to {file/link}"
         help_msg += "\n\n<b>Multi links only by replying to first link or file:</b>"
         help_msg += "\n<code>/command</code> 10(number of links/files)"
-        return sendMessage2(help_msg, bot, message)
+        return sendMessage(help_msg, bot, update)
     elif not os.path.exists(link) and not bot_utils.is_mega_link(link) and not bot_utils.is_gdrive_link(link) and not bot_utils.is_magnet(link):
         try:
             link = direct_link_generator(link)
         except DirectDownloadLinkException as e:
             LOGGER.info(e)
             if "ERROR:" in str(e):
-                sendMessage2(f"{e}", bot, message)
+                sendMessage(f"{e}", bot, update)
                 return
             if "Youtube" in str(e):
-                sendMessage2(f"{e}", bot, message)
+                sendMessage(f"{e}", bot, update)
                 return
 
-    listener = MirrorListener(bot, message, pswd, isZip, extract, isQbit, isLeech)
+    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech)
 
     if bot_utils.is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
-            sendMessage2(f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\nUse /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\nUse /{BotCommands.UnzipMirrorCommand} to extracts archive Google Drive file", bot, message)
+            sendMessage(f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\nUse /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\nUse /{BotCommands.UnzipMirrorCommand} to extracts archive Google Drive file", bot, update)
             return
         res, size, name, files = gdriveTools.GoogleDriveHelper().helper(link)
         if res != "":
-            sendMessage2(res, bot, message)
+            sendMessage(res, bot, update)
             return
         if ZIP_UNZIP_LIMIT is not None:
             LOGGER.info('Checking File/Folder Size...')
             if size > ZIP_UNZIP_LIMIT * 1024**3:
                 msg = f'Failed, Zip/Unzip limit is {ZIP_UNZIP_LIMIT}GB.\nYour File/Folder size is {get_readable_file_size(size)}.'
-                sendMessage2(msg, bot, message)
+                sendMessage(msg, bot, update)
                 return
         LOGGER.info(f"Download Name: {name}")
         drive = gdriveTools.GoogleDriveHelper(name, listener)
@@ -485,11 +485,11 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
     elif bot_utils.is_mega_link(link):
         if BLOCK_MEGA_LINKS:
-            sendMessage2("Mega links are blocked!", bot, message)
+            sendMessage("Mega links are blocked!", bot, update)
             return
         link_type = bot_utils.get_mega_link_type(link)
         if link_type == "folder" and BLOCK_MEGA_FOLDER:
-            sendMessage2("Mega folder are blocked!", bot, message)
+            sendMessage("Mega folder are blocked!", bot, update)
         else:
             mega_dl = MegaDownloadHelper()
             mega_dl.add_download(link, f'{DOWNLOAD_DIR}{listener.uid}/', listener)
@@ -502,57 +502,55 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}{listener.uid}/', listener, name)
         sendStatusMessage(update, bot)
     
-    if multi > 1:
-        time.sleep(4)
-        nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
-        msg = message_args[0]
-        if len(mesg) > 2:
-            msg += '\n' + mesg[1] + '\n' + mesg[2]
-        nextmsg = sendMessage2(msg, bot, nextmsg)
-        nextmsg.from_user.id = message.from_user.id
-        multi -= 1
-        time.sleep(4)
-        _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
-		
-		
+    # if multi > 1:
+        # time.sleep(4)
+        # nextmsg = type('nextmsg', (object, ), {'message': update.message, 'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
+        # msg = message_args[0]
+        # if len(mesg) > 2:
+            # msg += '\n' + mesg[1] + '\n' + mesg[2]
+        # nextmsg = sendMessage2(msg, bot, nextmsg)
+        # nextmsg.from_user.id = update.message.from_user.id
+        # multi -= 1
+        # time.sleep(4)
+        # _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
 		
 
 
 def mirror(update, context):
-    _mirror(context.bot, update.message)
+    _mirror(context.bot, update)
 
 def unzip_mirror(update, context):
-    _mirror(context.bot, update.message, extract=True)
+    _mirror(context.bot, update, extract=True)
 
 def zip_mirror(update, context):
-    _mirror(context.bot, update.message, True)
+    _mirror(context.bot, update, True)
 
 def qb_mirror(update, context):
-    _mirror(context.bot, update.message, isQbit=True)
+    _mirror(context.bot, update, isQbit=True)
 
 def qb_unzip_mirror(update, context):
-    _mirror(context.bot, update.message, extract=True, isQbit=True)
+    _mirror(context.bot, update, extract=True, isQbit=True)
 
 def qb_zip_mirror(update, context):
-    _mirror(context.bot, update.message, True, isQbit=True)
+    _mirror(context.bot, update, True, isQbit=True)
 
 def leech(update, context):
-    _mirror(context.bot, update.message, isLeech=True)
+    _mirror(context.bot, update, isLeech=True)
 
 def unzip_leech(update, context):
-    _mirror(context.bot, update.message, extract=True, isLeech=True)
+    _mirror(context.bot, update, extract=True, isLeech=True)
 
 def zip_leech(update, context):
-    _mirror(context.bot, update.message, True, isLeech=True)
+    _mirror(context.bot, update, True, isLeech=True)
 
 def qb_leech(update, context):
-    _mirror(context.bot, update.message, isQbit=True, isLeech=True)
+    _mirror(context.bot, update, isQbit=True, isLeech=True)
 
 def qb_unzip_leech(update, context):
-    _mirror(context.bot, update.message, extract=True, isQbit=True, isLeech=True)
+    _mirror(context.bot, update, extract=True, isQbit=True, isLeech=True)
 
 def qb_zip_leech(update, context):
-    _mirror(context.bot, update.message, True, isQbit=True, isLeech=True)
+    _mirror(context.bot, update, True, isQbit=True, isLeech=True)
 
 mirror_handler = CommandHandler(BotCommands.MirrorCommand, mirror,
                                 filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
