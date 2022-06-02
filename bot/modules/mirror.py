@@ -505,12 +505,11 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
     if multi > 1:
         time.sleep(4)
         nextmsg = type('nextmsg', (object, ), {'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1, 'from_user': update.message.from_user.id, 'message': update.message})
-        mesg = nextmsg.message.text.split('\n')
-        message_args = mesg[0].split(' ', maxsplit=1)
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
         nextmsg = sendMessage(msg, bot, nextmsg)
+        nextmsg.from_user = update.message.from_user.id
         multi -= 1
         time.sleep(4)
         _mirror(bot, nextmsg, isZip, extract, isQbit, isLeech, multi)
