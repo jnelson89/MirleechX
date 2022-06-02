@@ -331,12 +331,12 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    try:
-        mesg = update.message.text.split('\n')
-    except AttributeError:
-        message = update
-        mesg = message.message.text.split('\n')
-    # mesg = update.message.text.split('\n')
+    # try:
+        # mesg = update.message.text.split('\n')
+    # except AttributeError:
+        # mes = update.message.text.split('\n')
+        # mesg = message.message.text.split('\n')
+    mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
