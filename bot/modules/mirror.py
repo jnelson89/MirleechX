@@ -10,8 +10,6 @@ import string
 import time
 import shutil
 
-from telegram.message import Message
-
 from telegram.ext import CommandHandler
 from telegram import InlineKeyboardMarkup
 
@@ -333,12 +331,11 @@ class MirrorListener(listeners.MirrorListeners):
             update_all_messages()
 
 def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False, multi=0):
-    # try:
-        # mesg = update.message.text.split('\n')
-    # except AttributeError:
-        # mes = update.message.text.split('\n')
-        # mesg = message.message.text.split('\n')
-    mesg = update.message.text.split('\n')
+    try:
+        mesg = update.message.text.split('\n')
+    except AttributeError:
+        mesg = update.text.split('\n')
+    # mesg = update.message.text.split('\n')
     message_args = mesg[0].split(' ', maxsplit=1)
     name_args = mesg[0].split('|', maxsplit=2)
     qbitsel = False
@@ -510,17 +507,6 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         sendStatusMessage(update, bot)
     
     if multi > 1:
-        def sendMessage2(text: str, bot, message: Message):
-            try:
-                return bot.send_message(message.chat_id,
-                                    reply_to_message_id=message.message_id,
-                                    text=text, allow_sending_without_reply=True, parse_mode='HTMl', disable_web_page_preview=True)
-            except RetryAfter as r:
-                LOGGER.warning(str(r))
-                time.sleep(r.retry_after * 1.5)
-                return sendMessage(text, bot, message)
-            except Exception as e:
-                LOGGER.error(str(e))
         time.sleep(4)
         nextmsg = type('nextmsg', (object, ), {'message': update.message, 'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
         msg = message_args[0]
