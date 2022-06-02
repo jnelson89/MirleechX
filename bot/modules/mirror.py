@@ -45,6 +45,7 @@ ariaDlManager.start_listener()
 class MirrorListener(listeners.MirrorListeners):
     def __init__(self, bot, update, pswd, isZip=False, extract=False, isQbit=False, isLeech=False):
         super().__init__(bot, update)
+        self.update = update
         self.extract = extract
         self.isZip = isZip
         self.isQbit = isQbit
