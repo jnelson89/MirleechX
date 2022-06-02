@@ -45,7 +45,6 @@ ariaDlManager.start_listener()
 class MirrorListener(listeners.MirrorListeners):
     def __init__(self, bot, update, pswd, isZip=False, extract=False, isQbit=False, isLeech=False):
         super().__init__(bot, update)
-        self.update = update
         self.extract = extract
         self.isZip = isZip
         self.isQbit = isQbit
@@ -459,7 +458,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 sendMessage2(f"{e}", bot, message)
                 return
 
-    listener = MirrorListener(bot, update, pswd, isZip, extract, isQbit, isLeech)
+    listener = MirrorListener(bot, message, pswd, isZip, extract, isQbit, isLeech)
 
     if bot_utils.is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
