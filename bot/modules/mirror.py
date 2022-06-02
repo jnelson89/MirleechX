@@ -508,12 +508,23 @@ def _mirror(bot, update, isZip=False, extract=False, isQbit=False, isLeech=False
         sendStatusMessage(update, bot)
     
     if multi > 1:
+        def sendMessage2(text: str, bot, message: Message):
+            try:
+                return bot.send_message(message.chat_id,
+                                    reply_to_message_id=message.message_id,
+                                    text=text, allow_sending_without_reply=True, parse_mode='HTMl', disable_web_page_preview=True)
+            except RetryAfter as r:
+                LOGGER.warning(str(r))
+                time.sleep(r.retry_after * 1.5)
+                return sendMessage(text, bot, message)
+            except Exception as e:
+                LOGGER.error(str(e))
         time.sleep(4)
-        nextmsg = type('nextmsg', (object, ), {'message': update.message, 'chat_id': update.message.chat_id, 'message_id': update.message.reply_to_message.message_id + 1})
+        nextmsg = type('nextmsg', (object, ), {'chat_id': message.chat_id, 'message_id': message.reply_to_message.message_id + 1})
         msg = message_args[0]
         if len(mesg) > 2:
             msg += '\n' + mesg[1] + '\n' + mesg[2]
-        nextmsg = sendMessage(msg, bot, nextmsg)
+        nextmsg = sendMessage2(msg, bot, nextmsg)
         nextmsg.from_user.id = update.message.from_user.id
         multi -= 1
         time.sleep(4)
